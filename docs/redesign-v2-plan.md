@@ -64,6 +64,20 @@ Reduced motion: no pinning; each state is a still pose with its text.
 - Camera: keyframes `{target, orbit:[az, el, dist], fov}` with monotone cubic Hermite per channel and
   log-space distance (pattern from `marinachain-product-videos/products/series/look3d/camera.ts`).
 
+### Scroll performance (measured 2026-10-14)
+
+- `SceneWarmup` compiles every material (`compileAsync`) and draws one frame while the visitor is on
+  the cover. Without it, three.js compiled shaders the first time each object came into view and the
+  page froze mid-scroll (0.15–0.4 s with a warm shader cache, several seconds on a first visit).
+- Keep the number of lights constant. Light counts are part of every material's shader, so hiding a
+  light (or a group that holds one) recompiles all materials. Switch lights by `intensity` instead.
+- `SceneCanvas` drops to pixel ratio 1 for the rest of the visit after 2.5 s below 40 fps (drei
+  `PerformanceMonitor`), for older and integrated GPUs.
+- Lenis already smooths the wheel, so the camera damping is light (`SCROLL_DAMPING = 10`).
+- How to measure: production export, Playwright Chrome with `--use-angle=metal`, steady programmatic
+  scroll with `behavior: "instant"` (the page CSS sets `scroll-behavior: smooth`), long-animation-frame
+  entries for freezes, and `Emulation.setCPUThrottlingRate` 4 for an older CPU.
+
 ## Checks (run before each hand-off)
 
 1. `npx tsc --noEmit` and `npx next build` pass.

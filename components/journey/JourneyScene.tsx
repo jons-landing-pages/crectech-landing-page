@@ -8,6 +8,7 @@ import MoleculeStage from "@/components/journey/world/MoleculeStage";
 import Plant from "@/components/journey/world/Plant";
 import ReactorInterior from "@/components/journey/world/ReactorInterior";
 import SceneCanvas, { useReducedMotion } from "@/components/three/SceneCanvas";
+import SceneWarmup from "@/components/three/SceneWarmup";
 import StudioLights from "@/components/three/StudioLights";
 import { sceneLabels, type LabelElements } from "@/lib/journey/labels";
 import { journeyCameraKeys, journeyStates, TIMELINE_LENGTH } from "@/lib/journey/states";
@@ -15,8 +16,12 @@ import { applyLensShift, cameraAt } from "@/lib/three/camera";
 import { palette } from "@/lib/three/palette";
 import { smoothstep } from "@/lib/three/random";
 
-/** How quickly the camera catches up with the scroll position (higher is snappier). */
-const SCROLL_DAMPING = 4.5;
+/**
+ * How quickly the camera catches up with the scroll position (higher is snappier). Lenis already
+ * smooths wheel scrolling, so this only needs to take the edge off touch and keyboard jumps:
+ * at 10 the camera covers 90% of a jump in about 0.23 s.
+ */
+const SCROLL_DAMPING = 10;
 /** Camera distances (m) between which the world turns from paper to carbon. */
 const DARK_FROM = 26;
 const DARK_TO = 10;
@@ -88,6 +93,9 @@ const projected = new THREE.Vector3();
 /** Moves the DOM callouts to their anchors' screen positions and fades them by timeline window. */
 function LabelProjector({ labels, frame }: { labels: LabelElements; frame: { current: JourneyFrame } }) {
   const { camera, size } = useThree();
+  // Label widths, measured once per screen width: reading layout every frame forces a reflow.
+  const halfWidths = useMemo(() => new Map<string, number>(), [size.width]);
+
   useFrame(() => {
     const { at } = frame.current;
     for (const spec of sceneLabels) {
@@ -97,10 +105,18 @@ function LabelProjector({ labels, frame }: { labels: LabelElements; frame: { cur
       const opacity = smoothstep(from, from + LABEL_FADE, at) * (1 - smoothstep(to - LABEL_FADE, to, at));
       projected.set(...spec.anchor).project(camera);
       const behind = projected.z > 1;
-      element.style.opacity = behind ? "0" : String(opacity);
-      element.style.visibility = opacity < 0.01 || behind ? "hidden" : "visible";
+      if (opacity < 0.01 || behind) {
+        element.style.visibility = "hidden";
+        continue;
+      }
+      element.style.visibility = "visible";
+      element.style.opacity = String(opacity);
       // Keep the whole label on screen: clamp its centre by half its width plus a margin.
-      const halfWidth = element.offsetWidth / 2 + 12;
+      let halfWidth = halfWidths.get(spec.id);
+      if (halfWidth === undefined) {
+        halfWidth = element.offsetWidth / 2 + 12;
+        halfWidths.set(spec.id, halfWidth);
+      }
       const x = THREE.MathUtils.clamp(((projected.x + 1) / 2) * size.width, halfWidth, size.width - halfWidth);
       const y = ((1 - projected.y) / 2) * size.height;
       element.style.transform = `translate(-50%, -100%) translate(${x.toFixed(1)}px, ${y.toFixed(1)}px)`;
@@ -125,7 +141,7 @@ function SceneContents({ progress, labels }: { progress: { current: number }; la
       <ReactorInterior />
       <MoleculeStage />
       <LabelProjector labels={labels} frame={frame} />
-
+      <SceneWarmup />
     </JourneyContext.Provider>
   );
 }
@@ -136,7 +152,7 @@ export default function JourneyScene({ progress, labels }: { progress: { current
     <SceneCanvas
       className="h-full w-full"
       flat
-      dpr={[1, 1.5]}
+      maxDpr={1.5}
       camera={{ position: [0, 40, 100], fov: 30, near: 1, far: 2000 }}
     >
       <SceneContents progress={progress} labels={labels} />

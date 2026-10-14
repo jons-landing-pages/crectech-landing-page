@@ -227,31 +227,41 @@ function HeroPellet() {
 
 /** Below this camera distance (m) only the hero pellet and the molecules are drawn. */
 const EQUIPMENT_HIDE_DISTANCE = 0.025;
+/** Brightness of the warm lamp inside the reactor container. */
+const LAMP_INTENSITY = 6;
 
 export default function ReactorInterior() {
   const frame = useJourneyFrame();
   const group = useRef<THREE.Group>(null);
   const equipment = useRef<THREE.Group>(null);
+  const lamp = useRef<THREE.PointLight>(null);
 
   useFrame(() => {
     const { at, distance } = frame.current;
     // Only draw the interior while the container is open or the camera is inside.
-    if (group.current) group.current.visible = at > 330 && at < 940;
+    const interiorShown = at > 330 && at < 940;
     // Pen lines ignore fog, so the columns' edges would cross the molecule close-ups.
-    if (equipment.current) equipment.current.visible = distance > EQUIPMENT_HIDE_DISTANCE;
+    const equipmentShown = distance > EQUIPMENT_HIDE_DISTANCE;
+    if (group.current) group.current.visible = interiorShown;
+    if (equipment.current) equipment.current.visible = equipmentShown;
+    // The lamp is switched by intensity, not hidden. The number of lights is part of every material's
+    // shader, so hiding a light makes three.js recompile all of them in the middle of the scroll.
+    if (lamp.current) lamp.current.intensity = interiorShown && equipmentShown ? LAMP_INTENSITY : 0;
   });
 
   return (
-    <group ref={group}>
-      <group ref={equipment}>
-        <pointLight position={[21.5, 2.3, 7.4]} intensity={6} distance={9} color="#fff1dc" />
-        <CutawayColumn centre={REACTOR_1.centre} radius={REACTOR_1.radius} height={REACTOR_1.height} />
-        <CutawayColumn centre={REACTOR_2.centre} radius={REACTOR_2.radius} height={REACTOR_2.height} />
-        <PackedPellets />
-        <PackedTablets />
-        <Piping />
+    <>
+      <pointLight ref={lamp} position={[21.5, 2.3, 7.4]} intensity={0} distance={9} color="#fff1dc" />
+      <group ref={group}>
+        <group ref={equipment}>
+          <CutawayColumn centre={REACTOR_1.centre} radius={REACTOR_1.radius} height={REACTOR_1.height} />
+          <CutawayColumn centre={REACTOR_2.centre} radius={REACTOR_2.radius} height={REACTOR_2.height} />
+          <PackedPellets />
+          <PackedTablets />
+          <Piping />
+        </group>
+        <HeroPellet />
       </group>
-      <HeroPellet />
-    </group>
+    </>
   );
 }
