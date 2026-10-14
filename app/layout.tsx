@@ -1,7 +1,24 @@
 import type { Metadata } from "next";
+import { Archivo, IBM_Plex_Mono } from "next/font/google";
 import "@/app/globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import SmoothScroll from "@/components/SmoothScroll";
+
+// Archivo is variable on width; the "wdth" axis gives the expanded display cut.
+const archivo = Archivo({
+  subsets: ["latin"],
+  axes: ["wdth"],
+  variable: "--font-archivo",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -9,7 +26,7 @@ export const metadata: Metadata = {
     default: "CRecTech — Breakthrough Catalytic Technology",
   },
   description:
-    "CRecTech converts waste biogas into renewable bio-methanol using our proprietary CRecREF™ catalyst — cutting production costs by 50% and shipping emissions by 95%.",
+    "CRecTech turns palm oil mill biogas into marine-grade bio-methanol with its CRecREF™ catalyst, in two process steps instead of four and at about half the capital and operating cost.",
 };
 
 export default function RootLayout({
@@ -18,20 +35,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600&display=swap"
-          rel="stylesheet"
-        />
-      </head>
+    <html lang="en" className={`${archivo.variable} ${plexMono.variable}`}>
       <body>
+        <SmoothScroll />
         <Nav />
         {children}
         <Footer />
