@@ -83,4 +83,6 @@ Changes from the original plan, at the user's request:
 - Process comparison is an animated flow sheet (`components/shared/ProcessDiagram.tsx`).
 - All copy follows the antislop lens: full-sentence headlines with checkable facts.
 
-Next, if continuing: founder review of the open items in the summary (financial figures kept out, the bi-reforming balance, pilot date, photo rights), then commit and open a PR.
+The founder review items (financial figures kept out, the bi-reforming balance, pilot date, photo rights) are approved. The work is in PR #1 on `jons-landing-pages/crectech-landing-page`, and Vercel deploys a preview for each push. Next.js is on 16.3.8, which clears the critical `npm audit` advisories in 16.1.6 (`npm audit` reports 0 vulnerabilities).
+
+Next, if continuing: check the Vercel preview on a real phone (iOS Safari and Android Chrome), then merge PR #1.
