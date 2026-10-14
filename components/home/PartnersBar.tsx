@@ -1,37 +1,34 @@
-"use client";
 import Image from "next/image";
-
-const partners = [
-  { src: "/images/partners/nus-grip.png", alt: "NUS GRIP" },
-  { src: "/images/partners/startup-sg.png", alt: "Startup SG Founder" },
-  { src: "/images/partners/sginnovate.png", alt: "SGInnovate" },
-  { src: "/images/partners/temasek.png", alt: "Temasek" },
-  { src: "/images/partners/breakthrough-energy.png", alt: "Breakthrough Energy" },
-];
+import { partners } from "@/lib/site";
 
 export default function PartnersBar() {
   return (
-    <section className="py-10 bg-bg-alt border-y border-primary/10 overflow-hidden">
-      <p className="text-center text-xs uppercase tracking-widest mb-6 font-medium" style={{ color: "var(--color-muted)" }}>
-        Backed &amp; recognised by
-      </p>
-      <div className="flex animate-marquee whitespace-nowrap" aria-hidden="true">
-        {[...partners, ...partners].map((p, i) => (
-          <div key={i} className="inline-flex items-center justify-center mx-10 shrink-0">
-            <Image
-              src={p.src}
-              alt=""
-              width={140}
-              height={48}
-              className="h-10 w-auto object-contain opacity-70 hover:opacity-100 transition-opacity grayscale hover:grayscale-0"
-            />
-          </div>
-        ))}
+    <section aria-labelledby="partners-heading" className="border-b border-line bg-paper py-12">
+      <div className="mx-auto mb-8 max-w-7xl px-6">
+        <h2 id="partners-heading" className="label text-ink/50">
+          Backed &amp; recognised by
+        </h2>
       </div>
-      {/* Accessible static list hidden visually */}
+
+      <div className="marquee-mask overflow-hidden">
+        <div className="animate-marquee flex w-max hover:[animation-play-state:paused]" aria-hidden="true">
+          {[...partners, ...partners].map((partner, i) => (
+            <div key={i} className="mx-3 shrink-0">
+              <Image
+                src={partner.src}
+                alt=""
+                width={1273}
+                height={548}
+                className="h-16 w-auto object-contain md:h-20"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
       <ul className="sr-only">
-        {partners.map((p) => (
-          <li key={p.alt}>{p.alt}</li>
+        {partners.map((partner) => (
+          <li key={partner.name}>{partner.name}</li>
         ))}
       </ul>
     </section>

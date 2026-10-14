@@ -1,18 +1,32 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Brand */
-  --color-primary: #1D8348;
-  --color-primary-light: #2ECC71;
-  --color-accent: #D4950A;
-  --color-bg: #F7FAF8;
-  --color-bg-alt: #EDF5EF;
-  --color-dark: #1A2E1F;
-  --color-muted: rgba(26, 46, 31, 0.55);
+  /* Brand — sampled from the CRecTech logo (green wordmark, gold "Rec") */
+  --color-primary: #1a9645;
+  --color-primary-light: #3fd47a;
+  --color-accent: #d9a92c;
+  --color-accent-light: #f2cf6b;
+
+  /* Surfaces */
+  --color-carbon: #0a0f0c;
+  --color-carbon-2: #111813;
+  --color-carbon-3: #1a231d;
+  --color-paper: #f3f1ea;
+  --color-paper-2: #e9e6dc;
+  --color-ink: #121a14;
+  --color-line: rgba(18, 26, 20, 0.12);
+  --color-line-dark: rgba(243, 241, 234, 0.12);
+
+  /* Legacy aliases kept so older class names still resolve */
+  --color-bg: #f3f1ea;
+  --color-bg-alt: #e9e6dc;
+  --color-dark: #121a14;
+  --color-muted: rgba(18, 26, 20, 0.62);
 
   /* Typography */
-  --font-display: "Fraunces", Georgia, serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-display: var(--font-archivo), system-ui, sans-serif;
+  --font-body: var(--font-archivo), system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
 * {
@@ -24,28 +38,160 @@ html {
 }
 
 body {
-  background-color: var(--color-bg);
-  color: var(--color-dark);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
+  font-variation-settings: "wdth" 100;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-primary-light);
+  color: var(--color-carbon);
+}
+
+/* Wide, heavy display type: the industrial voice of the site. Headlines are full sentences,
+   so the width stays at 112 (of Archivo's 62–125 range) to keep them to two or three lines. */
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "wdth" 112;
+  letter-spacing: -0.025em;
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Small uppercase technical label, like an instrument annotation */
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+/* Film grain over dark surfaces */
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.07;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Fine engineering grid */
+.blueprint {
+  background-image:
+    linear-gradient(var(--color-line-dark) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line-dark) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.blueprint-light {
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 64px 64px;
 }
 
 /* Partners marquee */
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
 }
 
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 40s linear infinite;
 }
 
-/* CTA pulse glow */
-@keyframes ctaPulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(29, 131, 72, 0.4); }
-  50% { box-shadow: 0 0 0 8px rgba(29, 131, 72, 0); }
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
 }
 
-.animate-cta-pulse {
-  animation: ctaPulse 2.5s ease-in-out infinite;
+/* Slow dash flow for process diagrams */
+@keyframes dashflow {
+  to { stroke-dashoffset: -24; }
+}
+
+.animate-dashflow {
+  animation: dashflow 1.2s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-dashflow {
+    animation: none;
+  }
+}
+
+/* Hero entrance. Pure CSS so it plays before hydration and does not delay
+   the largest contentful paint. Set --delay inline per element. */
+@keyframes rise-in {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-rise-in {
+  animation: rise-in 1.1s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s) both;
+}
+
+.animate-fade-up {
+  animation: fade-up 1s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise-in,
+  .animate-fade-up {
+    animation: none;
+  }
+}
+
+/* Cover photo: a slow push-in (photo and overlay move together). */
+@keyframes push-in {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
+}
+
+.animate-push-in {
+  animation: push-in 24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform-origin: 45% 55%;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.fade-in {
+  animation: fade-in 1s ease-out var(--delay, 0s) both;
+}
+
+/* Line drawing for SVG paths with pathLength="1". */
+@keyframes draw-in {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+
+.draw-in {
+  stroke-dasharray: 1;
+  animation: draw-in 1.6s cubic-bezier(0.16, 1, 0.3, 1) var(--delay, 0s) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-push-in,
+  .fade-in,
+  .draw-in {
+    animation: none;
+  }
 }
