@@ -1,20 +1,25 @@
-"use client";
-import Hero from "@/components/home/Hero";
+import PhotoHero from "@/components/home/PhotoHero";
 import PartnersBar from "@/components/home/PartnersBar";
-import TechnologyTeaser from "@/components/home/TechnologyTeaser";
-import VisionCard from "@/components/home/VisionCard";
-import SystemsGrid from "@/components/home/SystemsGrid";
-import AboutNewsTeaser from "@/components/home/AboutNewsTeaser";
+import JourneySection from "@/components/journey/JourneySection";
+import ProblemSection from "@/components/home/ProblemSection";
+import BreakthroughSection from "@/components/home/BreakthroughSection";
+import RoadmapSection from "@/components/home/RoadmapSection";
+import ModelsSection from "@/components/home/ModelsSection";
+import ProofSection from "@/components/home/ProofSection";
+import TeamTeaser from "@/components/home/TeamTeaser";
 
 export default function HomePage() {
   return (
     <main>
-      <Hero />
+      <PhotoHero />
       <PartnersBar />
-      <TechnologyTeaser />
-      <VisionCard />
-      <SystemsGrid />
-      <AboutNewsTeaser />
+      <JourneySection />
+      <ProblemSection />
+      <BreakthroughSection />
+      <RoadmapSection />
+      <ModelsSection />
+      <ProofSection />
+      <TeamTeaser />
     </main>
   );
 }

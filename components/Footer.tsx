@@ -1,72 +1,76 @@
 import Image from "next/image";
-
-const links = [
-  { href: "/technology", label: "Technology" },
-  { href: "/about", label: "About Us" },
-  { href: "/news", label: "News" },
-  { href: "/contact", label: "Contact" },
-];
+import ArrowLink from "@/components/ui/ArrowLink";
+import { contactEmail, navLinks } from "@/lib/site";
 
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white/60 py-12">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 pb-10 border-b border-white/10">
-          {/* Brand */}
-          <div>
-            <Image
-              src="/images/CRecTech_logo.png"
-              alt="CRecTech"
-              width={110}
-              height={36}
-              className="h-8 w-auto mb-3 brightness-0 invert"
-            />
-            <p className="text-sm leading-relaxed">
-              Carbon Recycle Technologies. Turning waste biogas into renewable
-              bio-methanol for a sustainable future.
-            </p>
-          </div>
+    <footer className="grain relative overflow-hidden bg-carbon text-paper">
+      <div className="blueprint pointer-events-none absolute inset-0 opacity-40 [mask-image:linear-gradient(to_bottom,black,transparent)]" />
 
-          {/* Nav */}
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-4">Pages</h4>
-            <ul className="space-y-2">
-              {links.map((l) => (
-                <li key={l.href}>
-                  <a
-                    href={l.href}
-                    className="text-sm hover:text-primary transition-colors"
-                  >
-                    {l.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-white font-semibold text-sm mb-4">Contact</h4>
-            <p className="text-sm">
-              <a
-                href="mailto:contact@crectech.net"
-                className="hover:text-primary transition-colors"
-              >
-                contact@crectech.net
-              </a>
-            </p>
+      <div className="relative mx-auto max-w-7xl px-6 pb-10 pt-24 md:pt-32">
+        {/* Closing call to action */}
+        <div className="flex flex-col gap-10 border-b border-line-dark pb-16 md:flex-row md:items-end md:justify-between">
+          <h2 className="font-display max-w-3xl text-[clamp(2.4rem,6vw,5rem)] font-extrabold leading-[0.95]">
+            From waste
+            <br />
+            to <span className="text-accent-light">worth.</span>
+          </h2>
+          <div className="flex flex-col items-start gap-4">
+            <ArrowLink href="/contact">Book a meeting</ArrowLink>
             <a
-              href="/contact"
-              className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-primary text-white text-sm font-semibold hover:bg-primary/90 transition-colors"
+              href={`mailto:${contactEmail}`}
+              className="font-mono text-sm text-paper/60 transition-colors hover:text-primary-light"
             >
-              Book a Meeting →
+              {contactEmail}
             </a>
           </div>
         </div>
 
-        <div className="pt-6 flex flex-col md:flex-row justify-between gap-2 text-xs">
+        <div className="grid grid-cols-2 gap-10 py-12 md:grid-cols-4">
+          <div className="col-span-2">
+            <Image
+              src="/images/CRecTech_logo_white.png"
+              alt="CRecTech"
+              width={1837}
+              height={637}
+              className="h-10 w-auto"
+            />
+            <p className="mt-4 max-w-sm text-sm leading-relaxed text-paper/55">
+              Carbon Recycle Technologies. A deep-tech spin-off from the National
+              University of Singapore, converting waste biogas into renewable
+              bio-methanol.
+            </p>
+          </div>
+
+          <nav aria-label="Footer">
+            <p className="label mb-4 text-paper/40">Pages</p>
+            <ul className="space-y-2.5">
+              {navLinks.map((link) => (
+                <li key={link.href}>
+                  <a
+                    href={link.href}
+                    className="text-sm text-paper/70 transition-colors hover:text-primary-light"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div>
+            <p className="label mb-4 text-paper/40">Reaction</p>
+            <p className="font-mono text-sm leading-relaxed text-paper/70">
+              CH₄ + CO₂ + H₂O
+              <br />→ syngas (2 H₂ : 1 CO)
+              <br />→ CH₃OH
+            </p>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-between gap-2 border-t border-line-dark pt-6 font-mono text-xs text-paper/40 md:flex-row">
           <p>© {new Date().getFullYear()} CRecTech Pte. Ltd. All rights reserved.</p>
-          <p>Carbon Recycle Technologies</p>
+          <p>Singapore</p>
         </div>
       </div>
     </footer>
