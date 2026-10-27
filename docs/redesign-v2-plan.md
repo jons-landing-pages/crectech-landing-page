@@ -101,4 +101,4 @@ The founder review items (financial figures kept out, the bi-reforming balance, 
 
 **Status (2026-10-27):** type-check and build pass on 16.4.3. Phone emulation at 375×812 (local dev server, because the Vercel preview needs a Vercel login): cover, journey states and all inner pages have no horizontal scroll and no console errors.
 
-Next, if continuing: check the Vercel preview on a real phone (iOS Safari and Android Chrome), then merge PR #1.
+**Paused (2026-10-27):** the owner compared this redesign with the live site and prefers the live site. Do not merge PR #1. If the work restarts, the owner's direction is: keep the live site's short, teaser-style home page (about 4 screens tall, against about 18 for this redesign) and move the 3D journey and the detailed sections to a separate technology page.
