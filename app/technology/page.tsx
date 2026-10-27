@@ -90,7 +90,7 @@ export default function TechnologyPage() {
       </section>
 
       {/* Incumbent footprint */}
-      <section className="bg-paper-2 py-24 md:py-36">
+      <section id="incumbent" className="scroll-mt-24 bg-paper-2 py-24 md:py-36">
         <div className="mx-auto grid max-w-7xl gap-14 px-6 md:grid-cols-12">
           <Reveal className="md:col-span-6">
             <SectionLabel index="03">The incumbent</SectionLabel>
@@ -98,9 +98,11 @@ export default function TechnologyPage() {
               Fossil methanol comes mainly from steam methane reforming, which has a heavy footprint.
             </h2>
             <p className="mt-6 max-w-md text-lg leading-relaxed text-ink/65">
-              The process burns natural gas for heat, consumes large volumes of water, and its catalysts degrade over
-              time. These are its global totals for one year.
+              Shipping is turning to methanol, but only about 0.2% of the world&apos;s supply is sustainable. The
+              rest mostly comes from this process, which burns natural gas for heat, consumes large volumes of water,
+              and uses catalysts that degrade over time. These are its global totals for one year.
             </p>
+            <p className="mt-4 text-xs text-ink/45">Sustainable share: Journal of CO₂ Utilization 68 (2023) 102345</p>
           </Reveal>
           <Reveal className="md:col-span-6 md:col-start-7" delay={0.15}>
             <SMRFigures />
