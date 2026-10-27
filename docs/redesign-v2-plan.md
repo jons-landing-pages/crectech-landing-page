@@ -97,6 +97,8 @@ Changes from the original plan, at the user's request:
 - Process comparison is an animated flow sheet (`components/shared/ProcessDiagram.tsx`).
 - All copy follows the antislop lens: full-sentence headlines with checkable facts.
 
-The founder review items (financial figures kept out, the bi-reforming balance, pilot date, photo rights) are approved. The work is in PR #1 on `jons-landing-pages/crectech-landing-page`, and Vercel deploys a preview for each push. Next.js is on 16.3.8, which clears the critical `npm audit` advisories in 16.1.6 (`npm audit` reports 0 vulnerabilities).
+The founder review items (financial figures kept out, the bi-reforming balance, pilot date, photo rights) are approved. The work is in PR #1 on `jons-landing-pages/crectech-landing-page`, and Vercel deploys a preview for each push. Next.js is on 16.4.3. On 2026-10-27 `npm audit` reported new critical advisories for 16.0.0–16.4.0 (GHSA-2464-fhr4-w9xw, GHSA-p3m5-59mp-jv5r, GHSA-673q-mjm6-r5xr); 16.4.3 clears them (`npm audit` reports 0 vulnerabilities).
+
+**Status (2026-10-27):** type-check and build pass on 16.4.3. Phone emulation at 375×812 (local dev server, because the Vercel preview needs a Vercel login): cover, journey states and all inner pages have no horizontal scroll and no console errors.
 
 Next, if continuing: check the Vercel preview on a real phone (iOS Safari and Android Chrome), then merge PR #1.
